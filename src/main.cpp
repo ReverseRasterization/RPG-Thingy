@@ -1,4 +1,5 @@
 #include <iostream>
+#include <array>
 
 #include "map.h"
 #include <SFML/Graphics.hpp>
@@ -14,6 +15,28 @@ int main() {
     bool mouse_active = false;
     sf::Vector2i prev_mouse_position;
 
+    constexpr std::array level = {
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+        0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,
+        0,0,0,0,2,2,1,1,1,2,2,0,0,0,0,0,
+        0,0,0,2,2,1,1,1,1,1,2,2,0,0,0,0,
+        0,0,2,2,1,1,1,1,1,1,1,2,2,0,0,0,
+        0,0,2,1,1,1,1,1,1,1,1,1,2,0,0,0,
+        0,0,2,1,1,1,1,1,1,1,1,1,2,0,0,0,
+        0,0,2,1,1,1,1,1,1,1,1,1,2,0,0,0,
+        0,0,2,1,1,1,1,1,1,1,1,1,2,0,0,0,
+        0,0,2,1,1,1,1,1,1,1,1,1,2,0,0,0,
+        0,0,2,1,1,1,1,1,1,1,1,1,2,0,0,0,
+        0,0,2,2,1,1,1,1,1,1,1,2,2,0,0,0,
+        0,0,0,2,2,1,1,1,1,1,2,2,0,0,0,0,
+        0,0,0,0,2,2,1,1,1,2,2,0,0,0,0,0,
+        0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    };
+    
+
+    Map nMap = Map("assets/textures.jpg", level.data(), {0, 0}, 50, 16, 16);
+
     while (window.isOpen()) { 
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()){
@@ -22,6 +45,10 @@ int main() {
             if (event->is<sf::Event::MouseButtonPressed>()) {
                 mouse_active = true;
                 prev_mouse_position = sf::Mouse::getPosition(window);
+
+                sf::Vector2f worldPos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                std::cout << "(" << worldPos.x << ", " << worldPos.y << ")";
             } 
             if (event->is<sf::Event::MouseButtonReleased>()) {
                 mouse_active = false;
@@ -50,7 +77,7 @@ int main() {
             }
         }
 
-        Map nMap = Map({100, 100}, 50, 2, 2);
+        
 
         window.clear();
         window.setView(camera);
